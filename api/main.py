@@ -12,7 +12,7 @@ app = FastAPI(title="Heart Disease Prediction API")
 # Get absolute path to this file's directory
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MODEL_PATH = os.path.join(BASE_DIR, "model", "heart_disease_model.pkl")
-model = joblib.load("MODEL_PATH")
+model = joblib.load(MODEL_PATH)
 
 # ✅ 8 Features used in training
 class PatientData(BaseModel):
