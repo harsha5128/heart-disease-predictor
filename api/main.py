@@ -2,13 +2,17 @@
 
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
-import joblib
+import joblib 
+import os
 import numpy as np
 
 app = FastAPI(title="Heart Disease Prediction API")
 
 # Load model at startup
-model = joblib.load("api/model/heart_disease_model.pkl")
+# Get absolute path to this file's directory
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MODEL_PATH = os.path.join(BASE_DIR, "model", "heart_disease_model.pkl")
+model = joblib.load("MODEL_PATH")
 
 # ✅ 8 Features used in training
 class PatientData(BaseModel):
