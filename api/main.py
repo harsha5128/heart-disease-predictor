@@ -57,3 +57,7 @@ async def predict(data: PatientData):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Prediction failed: {str(e)}")
+
+@app.get("/")
+def root():
+    return {"message": "Welcome to the Heart Disease Prediction API!"}
