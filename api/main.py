@@ -1,46 +1,53 @@
-# File: api/main.py
-
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
-import joblib 
+import joblib
 import os
 import numpy as np
 
 app = FastAPI(title="Heart Disease Prediction API")
 
-# Load model at startup
-# Get absolute path to this file's directory
+# === Load model on startup ===
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MODEL_PATH = os.path.join(BASE_DIR, "model", "heart_disease_model.pkl")
 model = joblib.load(MODEL_PATH)
 
-# ✅ 8 Features used in training
+# === Input Schema (Matching Gold Layer Columns used in model training) ===
 class PatientData(BaseModel):
+    oldpeak: float = Field(..., ge=0.0, le=10.0, description="ST depression induced by exercise")
+    thalch: float = Field(..., ge=60, le=250, description="Maximum heart rate achieved")
+    exang: float = Field(..., ge=0, le=1, description="Exercise-induced angina (1 = yes, 0 = no)")
     age: float = Field(..., ge=0, le=120, description="Age in years")
+    ca: float = Field(..., ge=0, le=4, description="Number of major vessels colored by fluoroscopy")
     cp: float = Field(..., ge=0, le=3, description="Chest pain type")
-    trestbps: float = Field(..., ge=80, le=200, description="Resting blood pressure")
-    chol: float = Field(..., ge=100, le=600, description="Cholesterol in mg/dl")
-    thalch: float = Field(..., ge=60, le=220, description="Max heart rate achieved")
-    oldpeak: float = Field(..., ge=0.0, le=10.0, description="ST depression")
-    dataset: float = Field(..., description="Dataset ID")
-    id: float = Field(..., description="Patient ID")
+    dataset: float = Field(..., description="Dataset identifier")
+    id: float = Field(..., description="Patient identifier")
+    sex: float = Field(..., ge=0, le=1, description="Sex (1 = male, 0 = female)")
 
+# === Root Endpoint ===
+@app.get("/")
+def root():
+    return {"message": "Welcome to the Heart Disease Prediction API!"}
+
+# === Health Check ===
 @app.get("/health")
 async def health_check():
     return {"status": "ok"}
 
+# === Prediction Endpoint ===
 @app.post("/predict")
 async def predict(data: PatientData):
     try:
+        # Arrange features in the exact order as model was trained on
         features = np.array([
-            data.age,
-            data.cp,
-            data.trestbps,
-            data.chol,
-            data.thalch,
             data.oldpeak,
+            data.thalch,
+            data.exang,
+            data.age,
+            data.ca,
+            data.cp,
             data.dataset,
-            data.id
+            data.id,
+            data.sex
         ]).reshape(1, -1)
 
         prediction = model.predict(features)[0]
@@ -57,7 +64,3 @@ async def predict(data: PatientData):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Prediction failed: {str(e)}")
-
-@app.get("/")
-def root():
-    return {"message": "Welcome to the Heart Disease Prediction API!"}
