@@ -1,0 +1,6 @@
+# Ignore raw data files and other local-only content
+data/
+screenshots/
+*.csv
+.DS_Store
+__pycache__/
