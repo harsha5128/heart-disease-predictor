@@ -1,36 +1,36 @@
 #   Heart Disease Prediction using Medallion Architecture + FastAPI
 
-This project implements a complete **Machine Learning pipeline** for heart disease prediction using the **Medallion Architecture** in MongoDB. It includes **data preprocessing**, **model training**, and a **FastAPI REST API**, all deployed on **Render** and tested through **Swagger UI** and **Postman**.
+This project implements a complete **Machine Learning pipeline** for heart disease prediction using the **Medallion Architecture** in MongoDB. It includes **Data Preprocessing**, **Model Training**, and a **FastAPI REST API**, all deployed on **Render** and tested through **Swagger UI** and **Postman**.
 
 ---
 
-## 📌 Project Overview
+##               Project Overview
 
 - **Dataset**: [Kaggle - Heart Disease UCI](https://www.kaggle.com/datasets/redwankarimsony/heart-disease-data)
 - **Architecture**: Medallion (Bronze → Silver → Gold) using MongoDB Atlas
 - **Models Evaluated**: Logistic Regression, Random Forest, XGBoost
-- **Final Model**: ✅ **XGBoost**
-- **Deployment**: Render
+- **Final Model**: ✅ **XGBoost** based on all metrics 
+- **Deployment**: fastAPI on Render
 - **Testing Tools**: Swagger UI & Postman
 
 ---
 
-## 🧱 Medallion Architecture (MongoDB)
+##       Medallion Architecture (MongoDB)
 
-### 🟫 Bronze Layer
+###  Bronze Layer
 - Raw heart disease CSV ingested directly into MongoDB.
 - No transformations applied.
 - **Collection**: `heart_disease_bronze`
 - **Purpose**: Immutable, raw input archive.
 
-### 🟪 Silver Layer
+###  Silver Layer
 - Preprocessing steps:
   - Missing value imputation (mean/mode)
   - Label encoding (`sex`, `cp`, `thal`, etc.)
 - **Collection**: `heart_disease_silver`
 - **Purpose**: Clean, structured, ML-ready data.
 
-### 🟨 Gold Layer
+###  Gold Layer
 - Final transformation steps:
   - MinMax Scaling
   - Feature selection based on correlation and model importance
@@ -38,18 +38,18 @@ This project implements a complete **Machine Learning pipeline** for heart disea
 - **Collection**: `heart_disease_gold`
 - **Shape**: `(920, 10)`
 
-📸 **MongoDB Screenshots**:
-- `screenshots/bronze_sample.png`
-- `screenshots/silver_sample.png`
-- `screenshots/gold_sample.png`
+    **MongoDB Screenshots**:
+- `screenshots/mongohealthbronze.png`
+- `screenshots/mongohealthsilver.png`
+- `screenshots/mongohealthgold.png`
 
 ---
 
-## ⚙️ Model Development and Evaluation
+##  Model Development and Evaluation
 
-📓 Notebook: `notebooks/model_training.ipynb`
+ Notebook: `notebooks/model_training.ipynb`
 
-### 🔬 Steps Followed
+###  Steps Followed
 1. Exploratory Data Analysis (EDA)
 2. Handling missing values
 3. Label encoding for categorical variables
@@ -62,7 +62,7 @@ This project implements a complete **Machine Learning pipeline** for heart disea
 joblib.dump(best_model, "heart_disease_model.pkl")
 ```
 
-### 🤖 Models Compared
+###  Models Compared
 
 | Model              | Accuracy | Precision | Recall | F1 Score | ROC-AUC |
 |-------------------|----------|-----------|--------|----------|---------|
@@ -70,7 +70,7 @@ joblib.dump(best_model, "heart_disease_model.pkl")
 | Random Forest       | 0.87     | 0.86      | 0.87   | 0.86     | 0.89    |
 | **XGBoost** ✅       | **0.89** | **0.89**  | **0.88** | **0.89** | **0.91** |
 
-### ✅ Why XGBoost?
+###  Why XGBoost?
 - Best ROC-AUC (**0.91**), indicating top-ranking ability.
 - Excellent balance in precision, recall, and F1.
 - Handles outliers, feature interactions, and scale robustly.
@@ -78,12 +78,12 @@ joblib.dump(best_model, "heart_disease_model.pkl")
 
 ---
 
-## 🚀 FastAPI + MongoDB API
+##  FastAPI + MongoDB API
 
-### 🔗 Render Deployment (Live API)
-📍 [https://heart-disease-api-xyz.onrender.com](#) *(replace with your actual link)*
+###  Render Deployment (Live API)
+ [https://heart-disease-predictor-ylvv.onrender.com](#) 
 
-### 📘 API Endpoints
+###  API Endpoints
 
 | Method | Endpoint     | Description                  |
 |--------|--------------|------------------------------|
@@ -93,7 +93,7 @@ joblib.dump(best_model, "heart_disease_model.pkl")
 
 ---
 
-## 📬 Postman Instructions
+##  Postman Instructions
 
 1. Open Postman.
 2. Method: `POST`
@@ -114,53 +114,41 @@ joblib.dump(best_model, "heart_disease_model.pkl")
 }
 ```
 
-📸 Screenshots available in `screenshots/postman_predict_success.png`
+ Screenshots available in `screenshots/postrequest.png`
 
 ---
 
-## 🛠️ Setup Instructions
+##  Setup Instructions
 
-### ✅ Environment Setup
+###  Environment Setup
 
 ```bash
-git clone https://github.com/yourusername/heart-disease-predictor.git
+git clone https://github.com/harsha5128/heart-disease-predictor.git
 cd heart-disease-predictor
 python -m venv venv
 source venv/bin/activate  # Or venv\Scripts\activate on Windows
 pip install -r requirements.txt
 ```
 
-### ✅ Run MongoDB (if local)
+###  Run MongoDB (if local)
 - Ensure MongoDB is running locally or use MongoDB Atlas.
 
-### ✅ Launch API
+###  Launch API
 
 ```bash
 cd api
-uvicorn main:app --reload
+uvicorn main:app --reload  or uvicorn api.main:app --reload
 ```
 
 - Open: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
 
 ---
 
-## 📂 Folder Structure
 
-```
-heart-disease-predictor/
-├── api/                  # FastAPI application
-│   └── main.py
-├── model/                # .pkl model files
-├── notebooks/            # EDA and model training
-│   └── model_training.ipynb
-├── screenshots/          # Screenshots for submission
-├── requirements.txt
-└── README.md
-```
 
 ---
 
-## ✅ Submission Checklist
+##  Submission Checklist
 
 | Criteria               | ✅ Done |
 |------------------------|--------|
